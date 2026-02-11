@@ -1,0 +1,55 @@
+{
+    "name": "Ubuntu Development Container",
+    "privileged": true,
+    "remoteUser": "${localEnv:USER}",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "${localEnv:USER}"
+        }
+    },
+    "workspaceFolder": "${localWorkspaceFolder}",
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+    "customizations": {
+        "vscode": {
+            "extensions":[
+                "mhutchie.git-graph",
+                "ms-python.vscode-python-envs",
+                "ms-python.vscode-pylance",
+                "ms-python.python",
+                "ms-python.debugpy",
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "redhat.vscode-yaml",
+                "tamasfe.even-better-toml"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": "unix:0",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "NVIDIA_VISIBLE_DEVICES": "all",
+        "__NV_PRIME_RENDER_OFFLOAD": "1",
+        "__GLX_VENDOR_LIBRARY_NAME": "nvidia"
+    },
+    "runArgs": [
+        "--gpus", "all",
+        "--net=host",
+        "--pid=host",
+        "--ipc=host",
+        "-e", "DISPLAY=${env:DISPLAY}",
+        "--name", "ubuntu-development-container",
+        "--device=/dev/bus/usb",
+        "--device=/dev/video*",
+        "--group-add=dialout",
+        "--group-add=video",
+        "--group-add=plugdev"
+    ],
+    "mounts": [
+       "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+       "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+       "source=${localWorkspaceFolder}/zed_resources/zed_models,target=/usr/local/zed/resources,type=bind",
+       "source=${localWorkspaceFolder}/zed_resources/zed_calib,target=/usr/local/zed/settings,type=bind"
+    ],
+    "postCreateCommand": "sudo chown -R $(whoami) ${localWorkspaceFolder}"
+}

@@ -1,0 +1,109 @@
+[workspace]
+name = "slam_bench"
+channels = ["robostack-jazzy", "conda-forge",  "nvidia", "pytorch", "https://prefix.dev/robostack-jazzy", "https://prefix.dev/conda-forge"]
+platforms = ["linux-64"]
+
+# ============================================
+# Default for all environments
+# ============================================
+[dependencies]
+# ROS2 packages
+ros-jazzy-desktop-full = "*"
+ros-jazzy-rmw-cyclonedds-cpp = "*"
+ros-jazzy-ros-gz = "*"
+ros-jazzy-rviz2 = "*"
+ros-jazzy-rqt-common-plugins = "*"
+
+# Build tools for Python packages
+colcon-common-extensions = "*"
+setuptools = ">=70.0"
+# Build tools for C++ packages
+ros-jazzy-ament-cmake-auto = "*"
+compilers = "*"
+pkg-config = "*"
+cmake = "*"
+ninja = "*"
+ros-jazzy-ros-base = "*"
+make = "*"
+ros-jazzy-ros2cli = "*"
+
+
+# Workspace dependencies
+ros-jazzy-ament-cmake = "*"
+ros-jazzy-ament-cmake-copyright = "*"
+ros-jazzy-ament-cmake-cppcheck = "*"
+ros-jazzy-ament-cmake-lint-cmake = "*"
+ros-jazzy-ament-cmake-pep257 = "*"
+ros-jazzy-ament-cmake-uncrustify = "*"
+ros-jazzy-ament-cmake-xmllint = "*"
+ros-jazzy-ament-lint-auto = "*"
+ros-jazzy-backward-ros = "*"
+ros-jazzy-builtin-interfaces = "*"
+ros-jazzy-compressed-depth-image-transport = "*"
+ros-jazzy-compressed-image-transport = "*"
+ros-jazzy-diagnostic-msgs = "*"
+ros-jazzy-diagnostic-updater = "*"
+ros-jazzy-geographic-msgs = "*"
+ros-jazzy-geometry-msgs = "*"
+ros-jazzy-image-transport = "*"
+ros-jazzy-image-transport-plugins = "*"
+ros-jazzy-launch-ros = "*"
+ros-jazzy-nav-msgs = "*"
+ros-jazzy-nmea-msgs = "*"
+ros-jazzy-rclcpp = "*"
+ros-jazzy-rclcpp-components = "*"
+ros-jazzy-rcutils = "*"
+ros-jazzy-robot-localization = "*"
+ros-jazzy-rosgraph-msgs = "*"
+ros-jazzy-sensor-msgs = "*"
+ros-jazzy-std-msgs = "*"
+ros-jazzy-std-srvs = "*"
+ros-jazzy-stereo-msgs = "*"
+ros-jazzy-tf2 = "*"
+ros-jazzy-tf2-geometry-msgs = "*"
+ros-jazzy-tf2-ros = "*"
+ros-jazzy-theora-image-transport = "*"
+ros-jazzy-visualization-msgs = "*"
+ros-jazzy-xacro = "*"
+ros-jazzy-rosidl-default-generators = "*"
+ros-jazzy-rosidl-default-runtime = "*"
+ros-jazzy-shape-msgs = "*"
+
+[tasks]
+build = "colcon build --symlink-install"
+clean = "rm -rf build install log"
+test = {cmd = "colcon test", description = "Run tests for the workspace"}
+
+[activation]
+scripts = ["ros2_ws/install/setup.sh"]
+
+[activation.env]
+# CycloneDDS
+RMW_IMPLEMENTATION = "rmw_cyclonedds_cpp"
+ROS_DOMAIN_ID = "6"
+# Bridge ZED SDK (System) to Pixi
+CMAKE_PREFIX_PATH = "/usr/local/zed:$CMAKE_PREFIX_PATH"
+LD_LIBRARY_PATH = "/usr/local/zed/lib:$LD_LIBRARY_PATH"
+
+# ============================================
+# Feature: Workstation for Post-Processing
+# ============================================
+[feature.workstation.dependencies]
+# # Pytorch dependencies
+# pytorch = { version = "2.4.*", channel = "pytorch" }
+# pytorch-cuda = { version = "12.8.*", channel = "pytorch" }
+
+
+# NVIDIA dependencies
+cuda-toolkit = "12.8.*"
+[pypi-dependencies]
+tensorrt-cu12 = ">10.11"
+torch = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
+torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
+# ============================================
+# ENVIRONMENTS
+# ============================================
+[environments]
+# Workstation mode: "pixi shell -e workstation"
+workstation = ["default", "workstation"]
+
