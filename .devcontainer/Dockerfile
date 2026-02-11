@@ -52,10 +52,3 @@ RUN /usr/local/bin/pixi/bin/pixi global install pixi-ros
 
 # Add Pixi to PATH
 RUN echo "export PATH=\"/usr/local/bin/pixi/bin:/home/$USERNAME/.pixi/bin:\$PATH\"" >> ~/.bashrc
-
-
-# RUN echo 'COMPLETION_SCRIPT=$CONDA_PREFIX/share/colcon_argcomplete/hook/colcon-argcomplete.bash' \n\
-# # Source it if it exists \n\
-# if [ -f \'$COMPLETION_SCRIPT\' ]; then \n\
-#     source \'$COMPLETION_SCRIPT\'; \n\
-# fi' >> /home/$USERNAME/.bashrc
