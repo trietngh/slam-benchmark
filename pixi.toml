@@ -1,6 +1,13 @@
 [workspace]
 name = "slam_bench"
-channels = ["robostack-jazzy", "conda-forge",  "nvidia", "pytorch", "https://prefix.dev/robostack-jazzy", "https://prefix.dev/conda-forge"]
+channels = [
+    "robostack-jazzy",
+    "conda-forge",
+    "nvidia",
+    "pytorch",
+    "https://prefix.dev/robostack-jazzy",
+    "https://prefix.dev/conda-forge",
+]
 platforms = ["linux-64"]
 
 # ============================================
@@ -16,7 +23,7 @@ ros-jazzy-rqt-common-plugins = "*"
 
 # Build tools for Python packages
 colcon-common-extensions = "*"
-setuptools = ">=70.0"
+setuptools = "==68.1.2"
 # Build tools for C++ packages
 ros-jazzy-ament-cmake-auto = "*"
 compilers = "*"
@@ -29,6 +36,7 @@ ros-jazzy-ros2cli = "*"
 
 
 # Workspace dependencies
+pytest = "*"
 ros-jazzy-ament-cmake = "*"
 ros-jazzy-ament-cmake-copyright = "*"
 ros-jazzy-ament-cmake-cppcheck = "*"
@@ -36,11 +44,15 @@ ros-jazzy-ament-cmake-lint-cmake = "*"
 ros-jazzy-ament-cmake-pep257 = "*"
 ros-jazzy-ament-cmake-uncrustify = "*"
 ros-jazzy-ament-cmake-xmllint = "*"
+ros-jazzy-ament-copyright = "*"
+ros-jazzy-ament-flake8 = "*"
 ros-jazzy-ament-lint-auto = "*"
+ros-jazzy-ament-pep257 = "*"
 ros-jazzy-backward-ros = "*"
 ros-jazzy-builtin-interfaces = "*"
 ros-jazzy-compressed-depth-image-transport = "*"
 ros-jazzy-compressed-image-transport = "*"
+ros-jazzy-cv-bridge = "*"
 ros-jazzy-diagnostic-msgs = "*"
 ros-jazzy-diagnostic-updater = "*"
 ros-jazzy-geographic-msgs = "*"
@@ -52,10 +64,14 @@ ros-jazzy-nav-msgs = "*"
 ros-jazzy-nmea-msgs = "*"
 ros-jazzy-rclcpp = "*"
 ros-jazzy-rclcpp-components = "*"
+ros-jazzy-rclpy = "*"
 ros-jazzy-rcutils = "*"
 ros-jazzy-robot-localization = "*"
 ros-jazzy-rosgraph-msgs = "*"
+ros-jazzy-rosidl-default-generators = "*"
+ros-jazzy-rosidl-default-runtime = "*"
 ros-jazzy-sensor-msgs = "*"
+ros-jazzy-shape-msgs = "*"
 ros-jazzy-std-msgs = "*"
 ros-jazzy-std-srvs = "*"
 ros-jazzy-stereo-msgs = "*"
@@ -65,15 +81,12 @@ ros-jazzy-tf2-ros = "*"
 ros-jazzy-theora-image-transport = "*"
 ros-jazzy-visualization-msgs = "*"
 ros-jazzy-xacro = "*"
-ros-jazzy-rosidl-default-generators = "*"
-ros-jazzy-rosidl-default-runtime = "*"
-ros-jazzy-shape-msgs = "*"
 evo = ">=1.34.2,<2"
 
 [tasks]
 build = "colcon build --symlink-install"
 clean = "rm -rf build install log"
-test = {cmd = "colcon test", description = "Run tests for the workspace"}
+test = { cmd = "colcon test", description = "Run tests for the workspace" }
 
 [activation]
 scripts = ["ros2_ws/install/setup.sh"]
@@ -107,4 +120,3 @@ torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" 
 [environments]
 # Workstation mode: "pixi shell -e workstation"
 workstation = ["default", "workstation"]
-

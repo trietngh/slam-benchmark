@@ -1,0 +1,9 @@
+/**:
+  ros__parameters:
+    topics: ["/camera/image_raw"]
+    save_rate: 0.0
+    save_dir: "."
+    encoding: "bgr8"
+    mode: "async"
+    timeout: 0.1
+    use_sim_time: false
