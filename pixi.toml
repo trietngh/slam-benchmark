@@ -68,6 +68,7 @@ ros-jazzy-xacro = "*"
 ros-jazzy-rosidl-default-generators = "*"
 ros-jazzy-rosidl-default-runtime = "*"
 ros-jazzy-shape-msgs = "*"
+evo = ">=1.34.2,<2"
 
 [tasks]
 build = "colcon build --symlink-install"

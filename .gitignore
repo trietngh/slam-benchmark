@@ -6,6 +6,10 @@
 build/
 install/
 log/
+bag/
 
 # VSCode
 .vscode/
+
+# ZED camera resources (Machine learning models, calibration files, etc.)
+zed_resources/
