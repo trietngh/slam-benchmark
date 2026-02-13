@@ -1,6 +1,6 @@
 {
     "name": "Ubuntu Development Container",
-    "privileged": true,
+    "privileged": false,
     "remoteUser": "${localEnv:USER}",
     "build": {
         "dockerfile": "Dockerfile",
@@ -39,17 +39,21 @@
         "--ipc=host",
         "-e", "DISPLAY=${env:DISPLAY}",
         "--name", "ubuntu-development-container",
-        "--device=/dev/bus/usb",
-        "--device=/dev/video*",
+        "--device-cgroup-rule=c 81:* rmw",
+        "--device-cgroup-rule=c 189:* rmw",
+        // "--device=/dev/bus/usb",
+        // "--device=/dev/video*",
         "--group-add=dialout",
         "--group-add=video",
         "--group-add=plugdev"
     ],
     "mounts": [
-       "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-       "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
-       "source=${localWorkspaceFolder}/zed_resources/zed_models,target=/usr/local/zed/resources,type=bind",
-       "source=${localWorkspaceFolder}/zed_resources/zed_calib,target=/usr/local/zed/settings,type=bind"
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+        "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+        "source=/dev,target=/dev,type=bind",
+        "source=/run/udev,target=/run/udev,type=bind,readonly",
+        "source=${localWorkspaceFolder}/zed_resources/zed_models,target=/usr/local/zed/resources,type=bind",
+        "source=${localWorkspaceFolder}/zed_resources/zed_calib,target=/usr/local/zed/settings,type=bind"
     ],
     "postCreateCommand": "sudo chown -R $(whoami) ${localWorkspaceFolder}"
 }
