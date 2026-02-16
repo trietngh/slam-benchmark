@@ -141,6 +141,7 @@ moviepy = "*"
 pycolmap = "*"
 huggingface_hub = "*"
 einops = "*"
+eigen = "*"
 safetensors = "*"
 trimesh = "*"
 imageio = "*"
@@ -152,11 +153,14 @@ omegaconf = "*"
 [feature.da3.pypi-dependencies]
 pypose = "*"
 depth-anything-3 = { path = "./Depth-Anything-3", editable = true }
+gsplat = "==1.5.3"
 e3nn = "*"
 plyfile = "*"
 pillow-heif = "*"
 xformers = "*"
 open3d = "*"
+
+[feature.da3.tasks]
 
 # ============================================
 # ENVIRONMENTS
