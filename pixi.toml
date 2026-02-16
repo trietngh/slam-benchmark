@@ -14,29 +14,40 @@ platforms = ["linux-64"]
 # Default for all environments
 # ============================================
 [dependencies]
+# Build tools
+cmake = "*"
+ninja = "*"
+make = "*"
+pkg-config = "*"
+compilers = "*"
+pytest = "*"
+
+[tasks]
+build = "colcon build --symlink-install"
+clean = "rm -rf build install log"
+test = { cmd = "colcon test", description = "Run tests for the workspace" }
+
+# ============================================
+# Feature: ROS2 (Isolated)
+# ============================================
+[feature.ros2.dependencies]
 # ROS2 packages
 ros-jazzy-desktop-full = "*"
 ros-jazzy-rmw-cyclonedds-cpp = "*"
 ros-jazzy-ros-gz = "*"
 ros-jazzy-rviz2 = "*"
 ros-jazzy-rqt-common-plugins = "*"
+ros-jazzy-ros-base = "*"
+ros-jazzy-ros2cli = "*"
 
 # Build tools for Python packages
 colcon-common-extensions = "*"
 setuptools = "==68.1.2"
+
 # Build tools for C++ packages
 ros-jazzy-ament-cmake-auto = "*"
-compilers = "*"
-pkg-config = "*"
-cmake = "*"
-ninja = "*"
-ros-jazzy-ros-base = "*"
-make = "*"
-ros-jazzy-ros2cli = "*"
-
 
 # Workspace dependencies
-pytest = "*"
 ros-jazzy-ament-cmake = "*"
 ros-jazzy-ament-cmake-copyright = "*"
 ros-jazzy-ament-cmake-cppcheck = "*"
@@ -83,15 +94,10 @@ ros-jazzy-visualization-msgs = "*"
 ros-jazzy-xacro = "*"
 evo = ">=1.34.2,<2"
 
-[tasks]
-build = "colcon build --symlink-install"
-clean = "rm -rf build install log"
-test = { cmd = "colcon test", description = "Run tests for the workspace" }
-
-[activation]
+[feature.ros2.activation]
 scripts = ["ros2_ws/install/setup.sh"]
 
-[activation.env]
+[feature.ros2.activation.env]
 # CycloneDDS
 RMW_IMPLEMENTATION = "rmw_cyclonedds_cpp"
 ROS_DOMAIN_ID = "6"
@@ -115,8 +121,48 @@ tensorrt-cu12 = ">10.11"
 torch = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
 torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
 # ============================================
+# Feature: Depth Anything 3
+# ============================================
+[feature.da3.dependencies]
+numpy = "<2"
+opencv = "*"
+faiss-gpu = "*"
+python = "3.11.*"
+pandas = "*"
+prettytable = "*"
+numba = "*"
+evo = "*"
+pillow = "*"
+requests = "*"
+fastapi = "*"
+uvicorn = "*"
+typer = "*"
+moviepy = "*"
+pycolmap = "*"
+huggingface_hub = "*"
+einops = "*"
+safetensors = "*"
+trimesh = "*"
+imageio = "*"
+omegaconf = "*"
+# libopenblas = { version = ">=0.3.31,<0.4", channel = "conda-forge" }
+# libblas = { version = "*", build = "*openblas", channel = "conda-forge" }
+# libcblas = { version = "*", build = "*openblas", channel = "conda-forge" }
+
+[feature.da3.pypi-dependencies]
+pypose = "*"
+depth-anything-3 = { path = "./Depth-Anything-3", editable = true }
+e3nn = "*"
+plyfile = "*"
+pillow-heif = "*"
+xformers = "*"
+open3d = "*"
+
+# ============================================
 # ENVIRONMENTS
 # ============================================
 [environments]
 # Workstation mode: "pixi shell -e workstation"
-workstation = ["default", "workstation"]
+ros2 = ["default", "ros2"]
+workstation = ["default", "ros2", "workstation"]
+da3 = ["da3", "workstation"]
