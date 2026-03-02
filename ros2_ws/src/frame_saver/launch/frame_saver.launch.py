@@ -46,15 +46,15 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 config_file,
-                {
-                    'topics': LaunchConfiguration('topics'),
-                    'save_rate': LaunchConfiguration('save_rate'),
-                    'save_dir': LaunchConfiguration('save_dir'),
-                    'encoding': LaunchConfiguration('encoding'),
-                    'mode': LaunchConfiguration('mode'),
-                    'timeout': LaunchConfiguration('timeout'),
-                    'use_sim_time': LaunchConfiguration('use_sim_time'),
-                }
+                # {
+                #     'topics': LaunchConfiguration('topics'),
+                #     'save_rate': LaunchConfiguration('save_rate'),
+                #     'save_dir': LaunchConfiguration('save_dir'),
+                #     'encoding': LaunchConfiguration('encoding'),
+                #     'mode': LaunchConfiguration('mode'),
+                #     'timeout': LaunchConfiguration('timeout'),
+                #     'use_sim_time': LaunchConfiguration('use_sim_time'),
+                # }
             ]
         )
     ])
