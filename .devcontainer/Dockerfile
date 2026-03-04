@@ -15,22 +15,22 @@ ARG ROS_DISTRO=jazzy
 RUN echo "Setup User: $USERNAME (UID:$USER_UID / GID:$USER_GID)" && \
     # Handle the GROUP
     if getent group ${USER_GID} > /dev/null; then \
-        echo "Group ${USER_GID} exists. Renaming it to ${USERNAME}."; \
-        groupmod -n ${USERNAME} $(getent group ${USER_GID} | cut -d: -f1); \
+    echo "Group ${USER_GID} exists. Renaming it to ${USERNAME}."; \
+    groupmod -n ${USERNAME} $(getent group ${USER_GID} | cut -d: -f1); \
     else \
-        echo "Group ${USER_GID} does not exist. Creating it."; \
-        groupadd --gid ${USER_GID} ${USERNAME}; \
+    echo "Group ${USER_GID} does not exist. Creating it."; \
+    groupadd --gid ${USER_GID} ${USERNAME}; \
     fi && \
     # Handle the USER
     if getent passwd ${USER_UID} > /dev/null; then \
-        echo "User ${USER_UID} exists. Renaming it to ${USERNAME}."; \
-        EXISTING_USER=$(getent passwd ${USER_UID} | cut -d: -f1); \
-        usermod -l ${USERNAME} -d /home/${USERNAME} -m ${EXISTING_USER}; \
-        # Ensure the user belongs to the correct primary group
-        usermod -g ${USER_GID} ${USERNAME}; \
+    echo "User ${USER_UID} exists. Renaming it to ${USERNAME}."; \
+    EXISTING_USER=$(getent passwd ${USER_UID} | cut -d: -f1); \
+    usermod -l ${USERNAME} -d /home/${USERNAME} -m ${EXISTING_USER}; \
+    # Ensure the user belongs to the correct primary group
+    usermod -g ${USER_GID} ${USERNAME}; \
     else \
-        echo "User ${USER_UID} does not exist. Creating it."; \
-        useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}; \
+    echo "User ${USER_UID} does not exist. Creating it."; \
+    useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}; \
     fi && \
     # Add sudo support
     echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
@@ -38,14 +38,22 @@ RUN echo "Setup User: $USERNAME (UID:$USER_UID / GID:$USER_GID)" && \
 
 ENV SHELL=/bin/bash
 
+# Update all packages
+RUN sudo apt update && sudo apt upgrade -y
+
+# Install miscelaneous packages
+RUN sudo apt install -y \
+    pcl-tools
+
 # Install Pixi
 RUN curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/usr/local/bin/pixi bash
 
+# Install Pip
+# RUN python3 -m ensurepip --upgrade
+# RUN python3 -m pip install --upgrade pip
+
 # Switch from root to user
 USER $USERNAME
-
-# Update all packages
-RUN sudo apt update && sudo apt upgrade -y
 
 # Install pixi-ros plugin
 RUN /usr/local/bin/pixi/bin/pixi global install pixi-ros

@@ -2,8 +2,8 @@
 name = "slam_bench"
 channels = [
     "robostack-jazzy",
-    "conda-forge",
     "nvidia",
+    "conda-forge",
     "pytorch",
     "https://prefix.dev/robostack-jazzy",
     "https://prefix.dev/conda-forge",
@@ -19,16 +19,13 @@ cmake = "*"
 ninja = "*"
 make = "*"
 pkg-config = "*"
-compilers = "*"
-pytest = "*"
-
 [tasks]
 build = "colcon build --symlink-install"
 clean = "rm -rf build install log"
 test = { cmd = "colcon test", description = "Run tests for the workspace" }
 
 # ============================================
-# Feature: ROS2 (Isolated)
+# Feature: ROS2
 # ============================================
 [feature.ros2.dependencies]
 # ROS2 packages
@@ -119,7 +116,7 @@ LD_LIBRARY_PATH = "/usr/local/zed/lib:$LD_LIBRARY_PATH"
 
 # NVIDIA dependencies
 cuda-toolkit = "12.8.*"
-[pypi-dependencies]
+[feature.workstation.pypi-dependencies]
 tensorrt-cu12 = ">10.11"
 torch = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
 torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
@@ -163,7 +160,73 @@ pillow-heif = "*"
 xformers = "*"
 open3d = "*"
 
-[feature.da3.tasks]
+# ============================================
+# Feature: WildGS-SLAM
+# ============================================
+[feature.wildgs]
+channels = ["nvidia"]
+[feature.wildgs.dependencies]
+python = "3.10.*"
+gcc_linux-64 = "11.*"
+gxx_linux-64 = "11.*"
+cuda-toolkit = "11.8.*"
+cuda-version = { version = "11.8.*", channel = "conda-forge" }
+cuda-nvcc = "11.8.*"
+cuda-runtime = "11.8.*"
+cuda-cudart = "11.8.*"
+cuda-libraries = "11.8.*"
+cuda-nvrtc = "11.8.*"
+
+[feature.wildgs.pypi-dependencies]
+numpy = "==1.26.3"
+setuptools = "==78.1.1"
+torch = { version = "==2.1.0", index = "https://download.pytorch.org/whl/cu118" }
+torchvision = { version = "==0.16.0", index = "https://download.pytorch.org/whl/cu118" }
+torchaudio = { version = "==2.1.0", index = "https://download.pytorch.org/whl/cu118" }
+xformers = { version = "==0.0.22.post7", index = "https://download.pytorch.org/whl/cu118" }
+torch-scatter = { url = "https://data.pyg.org/whl/torch-2.1.0%2Bcu118/torch_scatter-2.1.2%2Bpt21cu118-cp310-cp310-linux_x86_64.whl" }
+pillow = "*"
+imageio = "*"
+joblib = "*"
+pandas = "*"
+scikit-image = "*"
+scikit-learn = "*"
+scipy = "*"
+seaborn = "*"
+PyOpenGL-accelerate = "*"
+pyrender = "*"
+ninja = "*"
+timm = "==0.9.10"
+plyfile = "==0.8.1"
+tqdm = "*"
+opencv-python = "==4.8.1.78"
+munch = "*"
+evo = "*"
+open3d = "==0.17.0"
+torchmetrics = "*"
+imgviz = "*"
+lpips = "*"
+rich = "*"
+kornia = "*"
+PyQt5 = "*"
+glfw = "*"
+PyGLM = "*"
+mmengine = "*"
+mmcv-full = { url = "https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/mmcv_full-1.7.2-cp310-cp310-manylinux1_x86_64.whl" }
+simple-knn = { path = "./WildGS-SLAM/thirdparty/simple-knn" }
+lietorch = { path = "./WildGS-SLAM/thirdparty/lietorch" }
+diff-gaussian-rasterization = { path = "./WildGS-SLAM/thirdparty/diff-gaussian-rasterization-w-pose" }
+droid-backends = { path = "./WildGS-SLAM/", editable = true }
+[feature.wildgs.pypi-options]
+no-build-isolation = [
+    "simple-knn",
+    "lietorch",
+    "diff-gaussian-rasterization",
+    "droid-backends",
+]
+
+[feature.wildgs.activation.env]
+CUDA_HOME = "${CONDA_PREFIX}"
 
 # ============================================
 # ENVIRONMENTS
@@ -173,3 +236,4 @@ open3d = "*"
 ros2 = ["default", "ros2"]
 workstation = ["default", "ros2", "workstation"]
 da3 = ["da3", "workstation"]
+wildgs = ["default", "wildgs"]
