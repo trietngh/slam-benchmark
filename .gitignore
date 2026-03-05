@@ -10,6 +10,6 @@ bag/
 
 # VSCode
 .vscode/
-.pyc
+*.pyc
 # ZED camera resources (Machine learning models, calibration files, etc.)
 zed_resources/
