@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>frame_saver</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="tr_nguye@insa-toulouse.fr">icta</maintainer>
   <license>MIT</license>
