@@ -181,6 +181,11 @@ class FrameSaverNode(Node):
         
         try:
             cv2.imwrite(path, cv_image)
+            
+            timestamp_log_path = os.path.join(self.topic_dirs[topic_index], "timestamps.txt")
+            with open(timestamp_log_path, "a") as f:
+                ts_str = f"{timestamp.sec}.{timestamp.nanosec:09d}"
+                f.write(f"{ts_str} {filename}\n")
         except OSError as e:
             self.log_error(f"Failed to save image to '{path}': {e}")
         # self.get_logger().debug(f"Saved {path}")
