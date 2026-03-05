@@ -64,6 +64,8 @@ class FrameSaverNode(Node):
                 sub = self.create_subscription(Image, topic, callback, 10)
                 self.subs.append(sub)
                 self.last_save_time[i+1] = 0.0
+                self.get_logger().info(f"Subscribed to topic {topic}")
+                
         elif self.mode == 'sync':
             self.get_logger().info(f"Starting in SYNC mode with rate {self.save_rate} Hz")
             if self.save_rate <= 0:
@@ -76,6 +78,7 @@ class FrameSaverNode(Node):
                 # Ensure the buffer size is enough
                 sub = self.create_subscription(Image, topic, callback, 10)
                 self.subs.append(sub)
+                self.get_logger().info(f"Subscribed to topic {topic}")
             
             self.timer = self.create_timer(1.0 / self.save_rate, self.sync_timer_callback)
         else:
