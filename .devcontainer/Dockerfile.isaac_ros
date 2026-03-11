@@ -1,0 +1,29 @@
+FROM nvcr.io/nvidia/isaac/ros:isaac_ros_740c8500df2685ab1f4a4e53852601df-amd64
+
+ARG USERNAME=admin
+
+ENV SHELL=/bin/bash
+
+# Switch to root to install curl
+USER root
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# The base image creates the user via workspace-entrypoint.sh, but we need
+# to ensure Pixi is installed into the skeleton so it applies to the mapped user later
+RUN curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/usr/local/pixi bash
+
+# Add Pixi to PATH globally
+ENV PATH=/usr/local/pixi/bin:$PATH
+
+# Install pixi-ros plugin globally
+RUN /usr/local/pixi/bin/pixi global install pixi-ros
+
+# Add Pixi to default bashrc so the mapped user has it
+RUN echo "export PATH=\"/usr/local/pixi/bin:\$PATH\"" >> /etc/skel/.bashrc
+
+# Install necessary packages for Isaac
+RUN apt-get update && apt-get install -y \
+    libnvvpi4 \
+    vpi4-dev \
+    ros-jazzy-isaac-ros-nvblox \
+    ros-jazzy-isaac-ros-apriltag

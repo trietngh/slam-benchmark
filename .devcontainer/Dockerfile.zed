@@ -7,7 +7,7 @@ RUN apt-get install -y \
     curl \
     usbutils
 
-ARG USERNAME=USERNAME
+ARG USERNAME=zed
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG ROS_DISTRO=jazzy
@@ -15,22 +15,22 @@ ARG ROS_DISTRO=jazzy
 RUN echo "Setup User: $USERNAME (UID:$USER_UID / GID:$USER_GID)" && \
     # Handle the GROUP
     if getent group ${USER_GID} > /dev/null; then \
-        echo "Group ${USER_GID} exists. Renaming it to ${USERNAME}."; \
-        groupmod -n ${USERNAME} $(getent group ${USER_GID} | cut -d: -f1); \
+    echo "Group ${USER_GID} exists. Renaming it to ${USERNAME}."; \
+    groupmod -n ${USERNAME} $(getent group ${USER_GID} | cut -d: -f1); \
     else \
-        echo "Group ${USER_GID} does not exist. Creating it."; \
-        groupadd --gid ${USER_GID} ${USERNAME}; \
+    echo "Group ${USER_GID} does not exist. Creating it."; \
+    groupadd --gid ${USER_GID} ${USERNAME}; \
     fi && \
     # Handle the USER
     if getent passwd ${USER_UID} > /dev/null; then \
-        echo "User ${USER_UID} exists. Renaming it to ${USERNAME}."; \
-        EXISTING_USER=$(getent passwd ${USER_UID} | cut -d: -f1); \
-        usermod -l ${USERNAME} -d /home/${USERNAME} -m ${EXISTING_USER}; \
-        # Ensure the user belongs to the correct primary group
-        usermod -g ${USER_GID} ${USERNAME}; \
+    echo "User ${USER_UID} exists. Renaming it to ${USERNAME}."; \
+    EXISTING_USER=$(getent passwd ${USER_UID} | cut -d: -f1); \
+    usermod -l ${USERNAME} -d /home/${USERNAME} -m ${EXISTING_USER}; \
+    # Ensure the user belongs to the correct primary group
+    usermod -g ${USER_GID} ${USERNAME}; \
     else \
-        echo "User ${USER_UID} does not exist. Creating it."; \
-        useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}; \
+    echo "User ${USER_UID} does not exist. Creating it."; \
+    useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}; \
     fi && \
     # Add sudo support
     echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \

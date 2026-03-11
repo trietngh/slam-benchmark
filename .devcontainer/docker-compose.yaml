@@ -1,0 +1,83 @@
+services:
+  isaac-ros:
+    image: nvcr.io/nvidia/isaac/ros:isaac_ros_740c8500df2685ab1f4a4e53852601df-amd64
+    network_mode: host
+    ipc: host
+    pid: host
+    privileged: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID
+      - USERNAME=${USER:-admin}
+      - HOST_USER_UID=${LOCAL_UID:-1000}
+      - HOST_USER_GID=${LOCAL_GID:-1000}
+      - ISAAC_ROS_WS=/home/${USER:-admin}/slam_benchmark/ros2_ws
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.Xauthority:/home/${USER:-admin}/.Xauthority:rw
+      - ~/.bashrc:/home/${USER:-admin}/.bashrc:ro
+      - ~/.bash_profile:/home/${USER:-admin}/.bash_profile:ro
+      - ~/.profile:/home/${USER:-admin}/.profile:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ~/slam_benchmark:/home/${USER:-admin}/slam_benchmark/
+    build:
+      context: ~/slam_benchmark
+      dockerfile: .devcontainer/Dockerfile.isaac_ros
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    entrypoint: /usr/local/bin/scripts/workspace-entrypoint.sh
+    working_dir: /home/${USER:-admin}/slam_benchmark
+    command: /bin/bash
+    tty: true
+    stdin_open: true
+
+  zed:
+    build:
+      context: ~/slam_benchmark
+      dockerfile: .devcontainer/Dockerfile.zed
+      args:
+        USERNAME: ${USER:-1000}
+        USER_UID: ${LOCAL_UID:-1000}
+        USER_GID: ${LOCAL_GID:-1000}
+    network_mode: host
+    ipc: host
+    pid: host
+    environment:
+      - DISPLAY=$DISPLAY
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+    group_add:
+      - video
+      - dialout
+      - plugdev
+    device_cgroup_rules:
+      - "c 81:* rmw"
+      - "c 189:* rmw"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev/dri:/dev/dri
+      - /dev:/dev
+      - /run/udev:/run/udev:ro
+      - ~/slam_benchmark/zed_resources/zed_models:/usr/local/zed/resources
+      - ~/slam_benchmark/zed_resources/zed_calib:/usr/local/zed/settings
+      - ~/slam_benchmark:/home/${USER:-admin}/slam_benchmark
+    working_dir: /home/${USER:-admin}/slam_benchmark
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: /bin/bash
+    tty: true
+    stdin_open: true

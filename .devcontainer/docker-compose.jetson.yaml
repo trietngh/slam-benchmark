@@ -1,0 +1,12 @@
+services:
+  isaac-ros:
+    image: nvcr.io/nvidia/isaac/ros:isaac_ros_740c8500df2685ab1f4a4e53852601df-arm64-jetpack
+    network_mode: host
+    volumes:
+      - /usr/bin/tegrastats:/usr/bin/tegrastats
+      - /sys/kernel/debug:/sys/kernel/debug:ro
+      - /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra
+      - /usr/src/jetson_multimedia_api:/usr/src/jetson_multimedia_api
+      - /usr/share/vpi3:/usr/share/vpi3
+      - /dev/input:/dev/input
+      - /dev/bus/usb:/dev/bus/usb
