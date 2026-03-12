@@ -1,7 +1,8 @@
 {
     "name": "Isaac ROS and ZED Development Environment",
     "dockerComposeFile": "docker-compose.yaml",
-    "service": "isaac-ros",
+    // "service": "isaac-ros",
+    "service": "zed",
     "workspaceFolder": "/home/${localEnv:USER}/slam_benchmark",
     
     // Remote user dynamically maps to the host user via workspace-entrypoint

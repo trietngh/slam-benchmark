@@ -168,6 +168,11 @@ cuda-toolkit = "12.8.*"
 tensorrt-cu12 = ">10.11"
 torch = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
 torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
+torch-scatter = { version = "*" }
+
+[feature.workstation.pypi-options]
+no-build-isolation = ["torch-scatter"]
+
 # ============================================
 # Feature: Depth Anything 3
 # ============================================
@@ -217,22 +222,18 @@ channels = ["nvidia"]
 python = "3.10.*"
 gcc_linux-64 = "11.*"
 gxx_linux-64 = "11.*"
-cuda-toolkit = "11.8.*"
-cuda-version = { version = "11.8.*", channel = "conda-forge" }
-cuda-nvcc = "11.8.*"
-cuda-runtime = "11.8.*"
-cuda-cudart = "11.8.*"
-cuda-libraries = "11.8.*"
-cuda-nvrtc = "11.8.*"
+# cuda-version = { version = "12.8.*", channel = "conda-forge" }
+# cuda-nvcc = "12.8.*"
+# cuda-runtime = "12.8.*"
+# cuda-cudart = "12.8.*"
+# cuda-libraries = "12.8.*"
+# cuda-nvrtc = "12.8.*"
 
 [feature.wildgs.pypi-dependencies]
 numpy = "==1.26.3"
 setuptools = "==78.1.1"
-torch = { version = "==2.1.0", index = "https://download.pytorch.org/whl/cu118" }
-torchvision = { version = "==0.16.0", index = "https://download.pytorch.org/whl/cu118" }
-torchaudio = { version = "==2.1.0", index = "https://download.pytorch.org/whl/cu118" }
-xformers = { version = "==0.0.22.post7", index = "https://download.pytorch.org/whl/cu118" }
-torch-scatter = { url = "https://data.pyg.org/whl/torch-2.1.0%2Bcu118/torch_scatter-2.1.2%2Bpt21cu118-cp310-cp310-linux_x86_64.whl" }
+torchaudio = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
+xformers = "*"
 pillow = "*"
 imageio = "*"
 joblib = "*"
@@ -260,7 +261,7 @@ PyQt5 = "*"
 glfw = "*"
 PyGLM = "*"
 mmengine = "*"
-mmcv-full = { url = "https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/mmcv_full-1.7.2-cp310-cp310-manylinux1_x86_64.whl" }
+mmcv-full = { url = "https://download.openmmlab.com/mmcv/dist/cu121/torch2.1.0/mmcv_full-1.7.2-cp310-cp310-manylinux1_x86_64.whl" }
 simple-knn = { path = "./WildGS-SLAM/thirdparty/simple-knn" }
 lietorch = { path = "./WildGS-SLAM/thirdparty/lietorch" }
 diff-gaussian-rasterization = { path = "./WildGS-SLAM/thirdparty/diff-gaussian-rasterization-w-pose" }
@@ -285,4 +286,4 @@ ros2 = ["default", "ros2", "workstation"]
 workstation = ["default", "ros2", "workstation"]
 da3 = ["da3", "workstation"]
 zed = ["default", "zed"]
-wildgs = ["default", "wildgs"]
+wildgs = ["default", "workstation", "wildgs"]

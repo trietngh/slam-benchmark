@@ -1,42 +1,42 @@
 services:
-  isaac-ros:
-    image: nvcr.io/nvidia/isaac/ros:isaac_ros_740c8500df2685ab1f4a4e53852601df-amd64
-    network_mode: host
-    ipc: host
-    pid: host
-    privileged: true
-    environment:
-      - DISPLAY=$DISPLAY
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - ROS_DOMAIN_ID
-      - USERNAME=${USER:-admin}
-      - HOST_USER_UID=${LOCAL_UID:-1000}
-      - HOST_USER_GID=${LOCAL_GID:-1000}
-      - ISAAC_ROS_WS=/home/${USER:-admin}/slam_benchmark/ros2_ws
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - ~/.Xauthority:/home/${USER:-admin}/.Xauthority:rw
-      - ~/.bashrc:/home/${USER:-admin}/.bashrc:ro
-      - ~/.bash_profile:/home/${USER:-admin}/.bash_profile:ro
-      - ~/.profile:/home/${USER:-admin}/.profile:ro
-      - /etc/localtime:/etc/localtime:ro
-      - ~/slam_benchmark:/home/${USER:-admin}/slam_benchmark/
-    build:
-      context: ~/slam_benchmark
-      dockerfile: .devcontainer/Dockerfile.isaac_ros
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    entrypoint: /usr/local/bin/scripts/workspace-entrypoint.sh
-    working_dir: /home/${USER:-admin}/slam_benchmark
-    command: /bin/bash
-    tty: true
-    stdin_open: true
+  # isaac-ros:
+  #   image: nvcr.io/nvidia/isaac/ros:isaac_ros_740c8500df2685ab1f4a4e53852601df-amd64
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+  #   privileged: true
+  #   environment:
+  #     - DISPLAY=$DISPLAY
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - NVIDIA_DRIVER_CAPABILITIES=all
+  #     - ROS_DOMAIN_ID
+  #     - USERNAME=${USER:-admin}
+  #     - HOST_USER_UID=${LOCAL_UID:-1000}
+  #     - HOST_USER_GID=${LOCAL_GID:-1000}
+  #     - ISAAC_ROS_WS=/home/${USER:-admin}/slam_benchmark/ros2_ws
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #     - ~/.Xauthority:/home/${USER:-admin}/.Xauthority:rw
+  #     - ~/.bashrc:/home/${USER:-admin}/.bashrc:ro
+  #     - ~/.bash_profile:/home/${USER:-admin}/.bash_profile:ro
+  #     - ~/.profile:/home/${USER:-admin}/.profile:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ~/slam_benchmark:/home/${USER:-admin}/slam_benchmark/
+  #   build:
+  #     context: ~/slam_benchmark
+  #     dockerfile: .devcontainer/Dockerfile.isaac_ros
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: all
+  #             capabilities: [gpu]
+  #   entrypoint: /usr/local/bin/scripts/workspace-entrypoint.sh
+  #   working_dir: /home/${USER:-admin}/slam_benchmark
+  #   command: /bin/bash
+  #   tty: true
+  #   stdin_open: true
 
   zed:
     build:
