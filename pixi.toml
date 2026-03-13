@@ -154,25 +154,31 @@ CMAKE_PREFIX_PATH = "/usr/local/zed:$CMAKE_PREFIX_PATH"
 LD_LIBRARY_PATH = "/usr/local/zed/lib:$LD_LIBRARY_PATH"
 
 # ============================================
-# Feature: Workstation for Post-Processing
+# Feature: CUDA 12.8
 # ============================================
-[feature.workstation.dependencies]
-# # Pytorch dependencies
-# pytorch = { version = "2.4.*", channel = "pytorch" }
-# pytorch-cuda = { version = "12.8.*", channel = "pytorch" }
+[feature.cuda.dependencies]
+gcc_linux-64 = "11.*"
+gxx_linux-64 = "11.*"
+cuda = { version = "12.8.*", channel = "conda-forge" }
+# cuda-nvcc = "12.8.*"
+# cuda-cudart = "12.8.*"
+# cuda-libraries = "12.8.*"
+# cuda-nvrtc = "12.8.*"
 
+# cuda-driver-dev = "12.8.*"
+# cuda-cudart-dev = "12.8.*"
 
-# NVIDIA dependencies
-cuda-toolkit = "12.8.*"
-[feature.workstation.pypi-dependencies]
+[feature.cuda.pypi-dependencies]
 tensorrt-cu12 = ">10.11"
 torch = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
 torchvision = { version = "*", index = "https://download.pytorch.org/whl/cu128" }
-torch-scatter = { version = "*" }
+torch-scatter = { url = "https://data.pyg.org/whl/torch-2.10.0%2Bcu128/torch_scatter-2.1.2%2Bpt210cu128-cp312-cp312-linux_x86_64.whl" }
 
-[feature.workstation.pypi-options]
-no-build-isolation = ["torch-scatter"]
-
+[feature.cuda.activation.env]
+CUDA_HOME = "${CONDA_PREFIX}"
+# CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
+# LIBRARY_PATH = "${CONDA_PREFIX}/targets/x86_64-linux/lib:${CONDA_PREFIX}/lib"
+# TORCH_NVCC_FLAGS = "-I${CONDA_PREFIX}/targets/x86_64-linux/include"
 # ============================================
 # Feature: Depth Anything 3
 # ============================================
@@ -274,16 +280,12 @@ no-build-isolation = [
     "droid-backends",
 ]
 
-[feature.wildgs.activation.env]
-CUDA_HOME = "${CONDA_PREFIX}"
 
 # ============================================
 # ENVIRONMENTS
 # ============================================
 [environments]
-# Workstation mode: "pixi shell -e workstation"
-ros2 = ["default", "ros2", "workstation"]
-workstation = ["default", "ros2", "workstation"]
-da3 = ["da3", "workstation"]
+ros2 = ["default", "cuda", "ros2"]
+da3 = ["da3", "cuda"]
 zed = ["default", "zed"]
-wildgs = ["default", "workstation", "wildgs"]
+wildgs = ["default", "cuda", "wildgs"]
