@@ -10,10 +10,7 @@ def generate_launch_description():
     config_file = os.path.join(pkg_share, 'config', 'frame_saver.yaml')
 
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'topics',
-            default_value='["/camera/image_raw"]',
-            description='List of topics to subscribe to'),
+        # Topics and encodings are now configured exclusively via frame_saver.yaml
         DeclareLaunchArgument(
             'save_rate',
             default_value='0.0',
@@ -22,10 +19,7 @@ def generate_launch_description():
             'save_dir',
             default_value='.',
             description='Directory to save images'),
-        DeclareLaunchArgument(
-            'encoding',
-            default_value='bgr8',
-            description='Image encoding'),
+
         DeclareLaunchArgument(
             'mode',
             default_value='async',
@@ -44,17 +38,6 @@ def generate_launch_description():
             executable='frame_saver_node',
             name='frame_saver',
             output='screen',
-            parameters=[
-                config_file,
-                # {
-                #     'topics': LaunchConfiguration('topics'),
-                #     'save_rate': LaunchConfiguration('save_rate'),
-                #     'save_dir': LaunchConfiguration('save_dir'),
-                #     'encoding': LaunchConfiguration('encoding'),
-                #     'mode': LaunchConfiguration('mode'),
-                #     'timeout': LaunchConfiguration('timeout'),
-                #     'use_sim_time': LaunchConfiguration('use_sim_time'),
-                # }
-            ]
+            parameters=[config_file]
         )
     ])

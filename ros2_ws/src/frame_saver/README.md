@@ -64,10 +64,15 @@ Default configuration is stored in `config/frame_saver.yaml`:
 ```yaml
 /**:
   ros__parameters:
-    topics: ["/camera/image_raw"]  # List of image topics to subscribe to
+    image_types: ["rgb", "depth"]  # List of image groups
+    rgb:
+      topics: ["/camera/image_raw"] # Topics for this group
+      encoding: "bgr8"              # Encoding for this group (e.g., bgr8)
+    depth:
+      topics: ["/camera/depth/image_raw"]
+      encoding: "32FC1"             # Depth format. Saved as .tiff files.
     save_rate: 0.0                 # Hz. 0.0 = save all (async) or max speed
     save_dir: "."                  # Base directory for saving runs
-    encoding: "bgr8"               # Target encoding (e.g., bgr8, rgb8, mono8)
     mode: "async"                  # "async" or "sync"
     timeout: 0.1                   # Max time difference (s) for sync mode validation
     use_sim_time: false            # Set to true if running with bag files/sim
@@ -75,12 +80,11 @@ Default configuration is stored in `config/frame_saver.yaml`:
 
 ### Parameter Details
 
-| Parameter      | Type     | Default   | Description                                                                                       |
-| -------------- | -------- | --------- | ------------------------------------------------------------------------------------------------- |
-| `topics`       | string[] | `["..."]` | List of topic names to save.                                                                      |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `image_types` | string[] | `[]` | List of image group names. Each group must have `<group>.topics` and `<group>.encoding` defined. |
 | `save_rate`    | double   | `0.0`     | **Async**: Rate limit per topic (Hz). 0=No limit.<br>**Sync**: Frequency of the sync timer (Hz).  |
-| `save_dir`     | string   | `.`       | Absolute or relative path to the base save directory.                                             |
-| `encoding`     | string   | `bgr8`    | OpenCV encoding format.                                                                           |
+| `save_dir` | string | `.` | Absolute or relative path to the base save directory. |
 | `mode`         | string   | `async`   | `async`: Topics processed independently.<br>`sync`: Topics synchronized via buffer.               |
 | `timeout`      | double   | `0.1`     | **Sync only**: Max allowed age (seconds) of a message relative to `now()` to be considered valid. |
 | `use_sim_time` | bool     | `false`   | Synchronize with simulation/bag time.                                                             |

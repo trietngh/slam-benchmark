@@ -18,19 +18,31 @@ class FrameSaverNode(Node):
         super().__init__('frame_saver_node')
 
         # Parameters
-        self.declare_parameter('topics', [''], ParameterDescriptor(type=ParameterType.PARAMETER_STRING_ARRAY))
+        self.declare_parameter('image_types', [''], ParameterDescriptor(type=ParameterType.PARAMETER_STRING_ARRAY))
         self.declare_parameter('save_rate', 0.0)
         self.declare_parameter('save_dir', '.')
-        self.declare_parameter('encoding', 'bgr8')
         self.declare_parameter('mode', 'async')
         self.declare_parameter('timeout', 0.1)
 
-        self.topics = [t for t in self.get_parameter('topics').value if t]
+        image_types = [t for t in self.get_parameter('image_types').value if t]
         self.save_rate = self.get_parameter('save_rate').value
         self.save_dir = self.get_parameter('save_dir').value
-        self.encoding = self.get_parameter('encoding').value
         self.mode = self.get_parameter('mode').value
         self.timeout = self.get_parameter('timeout').value
+
+        self.topics = []
+        self.encodings = []
+
+        for img_type in image_types:
+            self.declare_parameter(f'{img_type}.topics', [''], ParameterDescriptor(type=ParameterType.PARAMETER_STRING_ARRAY))
+            self.declare_parameter(f'{img_type}.encoding', 'bgr8')
+            
+            type_topics = [t for t in self.get_parameter(f'{img_type}.topics').value if t]
+            type_encoding = self.get_parameter(f'{img_type}.encoding').value
+            
+            for t in type_topics:
+                self.topics.append(t)
+                self.encodings.append(type_encoding)
 
         if not self.topics:
             self.log_warn("No topics specified to save.")
@@ -170,16 +182,21 @@ class FrameSaverNode(Node):
                     pass
 
     def save_image(self, msg, topic_index):
+        encoding = self.encodings[topic_index - 1]
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding=self.encoding)
+            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding=encoding)
         except CvBridgeError as e:
             self.log_error(f"CvBridge Error: {e}")
             return
 
         timestamp = msg.header.stamp
-        # Filename: timestamp.png
+        # Filename: timestamp.ext
         # Use valid chars. ROS2 timestamp is sec.nanosec
-        filename = f"{timestamp.sec}.{timestamp.nanosec:09d}.png"
+        ext = ".png"
+        if '32f' in encoding.lower() or '64f' in encoding.lower():
+            ext = ".tiff"
+            
+        filename = f"{timestamp.sec}.{timestamp.nanosec:09d}{ext}"
         path = os.path.join(self.topic_dirs[topic_index], filename)
         
         try:
